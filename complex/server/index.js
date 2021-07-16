@@ -9,18 +9,31 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// Postgres Client Setup
-const { Pool } = require('pg');
-const pgClient = new Pool({
-  user: keys.pgUser,
-  host: keys.pgHost,
-  database: keys.pgDatabase,
-  password: keys.pgPassword,
-  port: keys.pgPort
-});
-pgClient.on('error', () => console.log('Lost PG connection'));
+console.log('OOKOK')
 
-pgClient
+var pgp = require('pg-promise')(/* options */)
+var db = pgp('postgres://'+ keys.pgUser+':'+ keys.pgPassword+'@'+keys.pgHost+':'+keys.pgPort+'/'+keys.pgDatabase)
+
+db.one('SELECT $1 AS value', 123)
+  .then(function (data) {
+    console.log('DATA:', data.value)
+  })
+  .catch(function (error) {
+    console.log('ERROR:', error)
+  })
+
+// Postgres Client Setup
+//const { Pool } = require('pg');
+//const pgClient = new Pool({
+//  user: keys.pgUser,
+//  host: keys.pgHost,
+//  database: keys.pgDatabase,
+//  password: keys.pgPassword,
+//  port: keys.pgPort
+//});
+//pgClient.on('error', () => console.log('Lost PG connection'));
+
+db
   .query('CREATE TABLE IF NOT EXISTS values (number INT)')
   .catch(err => console.log(err));
 
@@ -36,13 +49,13 @@ const redisPublisher = redisClient.duplicate();
 // Express route handlers
 
 app.get('/', (req, res) => {
-  res.send('Hi');
+  res.send(keys.pgUser +''+ keys.pgHost +''+ keys.pgDatabase +''+ keys.pgPassword +''+ keys.pgPort);
 });
 
 app.get('/values/all', async (req, res) => {
-  const values = await pgClient.query('SELECT * from values');
+  const values = await db.query('SELECT * from values');
 
-  res.send(values.rows);
+  res.send(values);
 });
 
 app.get('/values/current', async (req, res) => {
@@ -60,7 +73,7 @@ app.post('/values', async (req, res) => {
 
   redisClient.hset('values', index, 'Nothing yet!');
   redisPublisher.publish('insert', index);
-  pgClient.query('INSERT INTO values(number) VALUES($1)', [index]);
+  db.query('INSERT INTO values(number) VALUES($1)', [index]);
 
   res.send({ working: true });
 });
