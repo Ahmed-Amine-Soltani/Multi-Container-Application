@@ -14,7 +14,7 @@ after_success:
 #  - docker build -t ahmedaminesoltani/multi-worker  ./worker
 #  - docker build -t ahmedaminesoltani/multi-nginx   ./nginx
 #  - docker build -t ahmedaminesoltani/multi-server  ./server
-  - sudo echo "$DOCKER_PASSWORD"  | sudo docker login -u "$DOCKER_ID" --password-stdin
+  - sudo bash echo "$DOCKER_PASSWORD"  | sudo bash docker login -u "$DOCKER_ID" --password-stdin
 #  - docker login -u "$DOCKER_ID" -p "$DOCKER_PASSWORD"
 #  - docker push ahmedaminesoltani/multi-client
 #  - docker push ahmedaminesoltani/multi-worker
