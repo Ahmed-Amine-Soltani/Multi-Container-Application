@@ -1,2 +1,2 @@
 #!/bin/bash
-echo "!?saaR9909D7604*" | docker login -u "ahmedaminesoltani" --password-stdin
+echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
