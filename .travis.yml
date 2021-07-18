@@ -8,7 +8,7 @@ services:
 #
 script:
 #  - docker container run  -e CI=true  ahmedaminesoltani/react-test npm run test
-  - bash docker_push
+  - bash docker_push.sh
 
 after_success:
 #  - docker build -t ahmedaminesoltani/multi-client  ./client
