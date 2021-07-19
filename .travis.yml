@@ -21,14 +21,14 @@ after_success:
   - docker push ahmedaminesoltani/multi-worker
   - docker push ahmedaminesoltani/multi-nginx 
   - docker push ahmedaminesoltani/multi-server
-  deploy:
-    edge: true
-    provider: elasticbeanstalk 
-    region: "eu-central-1"
-    app: "multi-docker"
-    env: "Multidocker-env"
-    bucket_name: "elasticbeanstalk-eu-central-1-771253377026"
-    bucket_path: "multi-docker"
+deploy:
+  edge: true
+  provider: elasticbeanstalk 
+  region: "eu-central-1"
+  app: "multi-docker"
+  env: "Multidocker-env"
+  bucket_name: "elasticbeanstalk-eu-central-1-771253377026"
+  bucket_path: "multi-docker"
   on: 
     branch: master
   access_key_id: $AWS_ACCESS_KEY
